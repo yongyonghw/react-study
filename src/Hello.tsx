@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 // @ts-ignore
 function Hello(props:any) {
