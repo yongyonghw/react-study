@@ -5,6 +5,7 @@ function User(prop:any) {
     return (
         <div>
             {user.id} <b>{user.username}</b> <span>({user.email})</span>
+            <button onClick={()=> prop.onRemove(user.id)}>삭제</button>
         </div>
     );
 }
@@ -22,7 +23,7 @@ function UserList(props:any) {
         <div>
             {users.map((user: Users)=>(
                 // <User id={user.id} username={user.username} email={user.email} key={user.id}></User>
-                <User user={user}/>
+                <User user={user} key={user.id} onRemove={props.onRemove}/>
             ))}
 
         </div>
