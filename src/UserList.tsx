@@ -1,7 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 function User(prop:any) {
     const user = prop.user;
+
+    useEffect(() => {
+        console.log('user 값이 설정됨');
+        console.log(user);
+        return () => {
+            console.log('user 가 바뀌기 전..');
+            console.log(user);
+        };
+    }, [user]);
+
     return (
         <div>
             {user.id} <b onClick={() => prop.onToggle(user.id)} style={{cursor:'pointer', color: user.active ? 'green' : 'black'}}>{user.username}</b> <span>({user.email})</span>
