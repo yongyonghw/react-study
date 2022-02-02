@@ -6,12 +6,16 @@ import {useRef, useState} from "react";
 import CreateUser from "./CreateUser";
 
 function App() {
-    //username ,email 셋팅
-    const [inputs, setInputs] = useState({
+    const format = {
         username: '',
         email: '',
-        id:''
-    });
+        id:'',
+        active: false
+    }
+
+
+    //username ,email 셋팅
+    const [inputs, setInputs] = useState(format);
     const { username, email } = inputs;
 
     //input 값이 변할때마다 렌더링
@@ -27,17 +31,20 @@ function App() {
         {
             id: 1,
             username: 'velopert',
-            email: 'public.velopert@gmail.com'
+            email: 'public.velopert@gmail.com',
+            active: true
         },
         {
             id: 2,
             username: 'tester',
-            email: 'tester@example.com'
+            email: 'tester@example.com',
+            active: false
         },
         {
             id: 3,
             username: 'liz',
-            email: 'liz@example.com'
+            email: 'liz@example.com',
+            active: false
         }
     ]);
     //nextId 초기값 4
@@ -46,17 +53,14 @@ function App() {
         const user = {
             id: nextId.current,
             username,
-            email
+            email,
+            active: false
         };
         // setUsers([...users, user]);
         setUsers(users.concat(user));
 
         //초기화
-        setInputs({
-            username: '',
-            email: '',
-            id:''
-        });
+        setInputs(format);
         nextId.current += 1;
     }
 
@@ -64,13 +68,23 @@ function App() {
         setUsers(users.filter(user=> user.id !== id));
     }
 
+    const onToggle = (id:Number) => {
+        setUsers(
+            users.map(user =>
+                user.id === id ? {
+                    ...user, active: !user.active
+                } : user
+            )
+            );
+    };
+
     return (
         <>
             <CreateUser     username={username}
                             email={email}
                             onChange={onChange}
                             onCreate={onCreate}/>
-            <UserList users={users} onRemove={onRemove} />
+            <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
         </>
     );
 }
