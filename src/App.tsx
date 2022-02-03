@@ -2,7 +2,7 @@
 import Counter from "./Counter";
 import InputSample from "./InputSample";
 import UserList from "./UserList";
-import {useEffect, useMemo, useRef, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import CreateUser from "./CreateUser";
 
 function countActiveUsers(users : any) {
@@ -20,16 +20,16 @@ function App() {
 
     //username ,email 셋팅
     const [inputs, setInputs] = useState(format);
-    const { username, email } = inputs;
+    const { username, email} = inputs;
 
     //input 값이 변할때마다 렌더링
-    const onChange = (e:any) => {
+    const onChange = useCallback((e:any) => {
         const { name, value } = e.target;
         setInputs({
             ...inputs,
             [name]: value
         });
-    };
+    }, [inputs] );
 
     const [users, setUsers] = useState([
         {
@@ -53,7 +53,7 @@ function App() {
     ]);
     //nextId 초기값 4
     const nextId = useRef(4);
-    const onCreate = () => {
+    const onCreate = useCallback(() => {
         const user = {
             id: nextId.current,
             username,
@@ -62,17 +62,16 @@ function App() {
         };
         // setUsers([...users, user]);
         setUsers(users.concat(user));
-
         //초기화
         setInputs(format);
         nextId.current += 1;
-    }
+    }, [users, username, email]);
 
-    const onRemove = (id:Number) => {
+    const onRemove = useCallback((id:Number) => {
         setUsers(users.filter(user=> user.id !== id));
-    }
+    },[users]);
 
-    const onToggle = (id:Number) => {
+    const onToggle = useCallback((id:Number) => {
         setUsers(
             users.map(user =>
                 user.id === id ? {
@@ -80,9 +79,9 @@ function App() {
                 } : user
             )
             );
-    };
+    },[users] );
 
-    const count = useMemo(() => countActiveUsers(users),[users]);
+    const count = useCallback( countActiveUsers(users),[users]);
 
 
     return (
@@ -92,9 +91,18 @@ function App() {
                             onChange={onChange}
                             onCreate={onCreate}/>
             <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
-            <div>활성 사용자수 : {count}</div>
+            <ActiveUser count = {count}></ActiveUser>
         </>
     );
 }
+
+type ActiveUserProps = {
+    count: number;
+}
+
+const ActiveUser = React.memo(function ActiveUser({count} :ActiveUserProps) {
+    console.log('ActiveUser')
+    return <div>활성 사용자수 : {count}</div>;
+});
 
 export default App;

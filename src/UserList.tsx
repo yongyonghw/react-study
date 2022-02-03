@@ -1,6 +1,11 @@
 import React, {useEffect} from 'react';
 
-function User(prop:any) {
+type User= {
+    user:any, onToggle:any, onRemove:any
+}
+
+const User = React.memo(function User(prop: User) {
+    console.log('user')
     const user = prop.user;
 
     useEffect(() => {
@@ -18,7 +23,7 @@ function User(prop:any) {
             <button onClick={()=> prop.onRemove(user.id)}>삭제</button>
         </div>
     );
-}
+});
 
 type Users = {
     id?: number
@@ -26,8 +31,12 @@ type Users = {
     email?: string
 }
 
-function UserList(props:any) {
+type UserListType = {
+    users:any, onRemove:any, onToggle:any
+}
 
+function UserList(props:UserListType) {
+    console.log('userlist')
     const users = props.users
     return (
         <div>
@@ -40,4 +49,4 @@ function UserList(props:any) {
     );
 }
 
-export default UserList;
+export default React.memo(UserList);
