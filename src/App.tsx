@@ -2,8 +2,13 @@
 import Counter from "./Counter";
 import InputSample from "./InputSample";
 import UserList from "./UserList";
-import {useRef, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import CreateUser from "./CreateUser";
+
+function countActiveUsers(users : any) {
+    console.log('활성 사용자 수를 세는중...');
+    return users.filter((user:any) => user.active).length;
+}
 
 function App() {
     const format = {
@@ -12,7 +17,6 @@ function App() {
         id:'',
         active: false
     }
-
 
     //username ,email 셋팅
     const [inputs, setInputs] = useState(format);
@@ -78,6 +82,9 @@ function App() {
             );
     };
 
+    const count = useMemo(() => countActiveUsers(users),[users]);
+
+
     return (
         <>
             <CreateUser     username={username}
@@ -85,6 +92,7 @@ function App() {
                             onChange={onChange}
                             onCreate={onCreate}/>
             <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
+            <div>활성 사용자수 : {count}</div>
         </>
     );
 }
