@@ -29,4 +29,4 @@ function CreateUser(props:CreateUserType) {
     );
 }
 
-export default React.memo(CreateUser);
+export default  React.memo(CreateUser);

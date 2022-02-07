@@ -56,6 +56,18 @@ function reducer(state:any, action:any) {
                 inputs: initialState.inputs,
                 users: state.users.concat(action.user)
             }
+        case 'TOGGLE_USER':
+            return {
+                ...state,
+                users: state.users.map((user:any) =>
+                    user.id === action.id ? { ...user, active: !user.active } : user
+                )
+            };
+        case 'REMOVE_USER':
+            return {
+                ...state,
+                users: state.users.filter((user:any) => user.id !== action.id)
+            };
 
         default:
             return state;
@@ -72,7 +84,8 @@ function AppReducer() {
     const onChange = useCallback((e:any) => {
         const { name, value } = e.target;
         dispatch( {
-            type: 'CHANGE_INPUT'
+            type: 'CHANGE_INPUT',
+            name,value
         });
     }, [] );
 
@@ -88,12 +101,26 @@ function AppReducer() {
         nextId.current += 1;
     }, [username, email]);
 
+    const onToggle = useCallback(id => {
+        dispatch({
+            type: 'TOGGLE_USER',
+            id
+        });
+    }, []);
 
+    const onRemove = useCallback(id => {
+        dispatch({
+            type: 'REMOVE_USER',
+            id
+        });
+    }, []);
+
+    const count = useMemo(() => countActiveUsers(users), [users]);
     return (
         <>
-            <CreateUser username={username} email={email} onChange={onChange} onCreate={onChange}/>
-            <UserList users={users} onRemove={''} onToggle={''}></UserList>
-            <div>활성사용자 수: 0</div>
+            <CreateUser username={username} email={email} onChange={onChange} onCreate={onCreate}/>
+            <UserList users={users} onRemove={onRemove} onToggle={onToggle}></UserList>
+            <div>활성사용자 수: {count}</div>
         </>
     )
 }
