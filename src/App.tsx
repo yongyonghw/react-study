@@ -25,11 +25,12 @@ function App() {
     //input 값이 변할때마다 렌더링
     const onChange = useCallback((e:any) => {
         const { name, value } = e.target;
-        setInputs({
+        setInputs(inputs => ({
+            //기존 input에 값을 덮어 씌운다
             ...inputs,
             [name]: value
-        });
-    }, [inputs] );
+        }));
+    }, [] );
 
     const [users, setUsers] = useState([
         {
@@ -61,28 +62,27 @@ function App() {
             active: false
         };
         // setUsers([...users, user]);
-        setUsers(users.concat(user));
+        setUsers(users => users.concat(user));
         //초기화
         setInputs(format);
         nextId.current += 1;
-    }, [users, username, email]);
+    }, [username, email]);
 
     const onRemove = useCallback((id:Number) => {
-        setUsers(users.filter(user=> user.id !== id));
-    },[users]);
+        setUsers(users => users.filter(user=> user.id !== id));
+    },[]);
 
     const onToggle = useCallback((id:Number) => {
-        setUsers(
-            users.map(user =>
+        setUsers(users =>
+                users.map(user =>
                 user.id === id ? {
                     ...user, active: !user.active
                 } : user
             )
             );
-    },[users] );
+    },[] );
 
     const count = useCallback( countActiveUsers(users),[users]);
-
 
     return (
         <>
