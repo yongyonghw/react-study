@@ -5,6 +5,7 @@ import UserList from "./UserList";
 import React, {useCallback, useEffect, useMemo, useReducer, useRef, useState} from "react";
 import CreateUser from "./CreateUser";
 import exp from "constants";
+import useInputs from "./hooks/useInputs";
 
 function countActiveUsers(users : any) {
     console.log('활성 사용자 수를 세는중...');
@@ -77,17 +78,18 @@ function reducer(state:any, action:any) {
 
 function AppReducer() {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const {users} = state;
-    const {username, email} = state.inputs;
+    const [{username,email}, onChange, reset] = useInputs({username:'', email:''})
+     const {users} = state;
+    // const {username, email} = state.inputs;
     const nextId = useRef(4);
 
-    const onChange = useCallback((e:any) => {
-        const { name, value } = e.target;
-        dispatch( {
-            type: 'CHANGE_INPUT',
-            name,value
-        });
-    }, [] );
+    // const onChange = useCallback((e:any) => {
+    //     const { name, value } = e.target;
+    //     dispatch( {
+    //         type: 'CHANGE_INPUT',
+    //         name,value
+    //     });
+    // }, [] );
 
     const onCreate = useCallback(() => {
         dispatch({
