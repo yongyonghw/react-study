@@ -1,10 +1,12 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
+import {UserDispatch} from "./App";
 
 type User= {
-    user:any, onToggle:any, onRemove:any
+    user:any
 }
 
 const User = React.memo(function User(prop: User) {
+    const dispatch = useContext(UserDispatch)
     console.log('user')
     const user = prop.user;
 
@@ -19,8 +21,8 @@ const User = React.memo(function User(prop: User) {
 
     return (
         <div>
-            {user.id} <b onClick={() => prop.onToggle(user.id)} style={{cursor:'pointer', color: user.active ? 'green' : 'black'}}>{user.username}</b> <span>({user.email})</span>
-            <button onClick={()=> prop.onRemove(user.id)}>삭제</button>
+            {user.id} <b onClick={() => dispatch({type:'TOGGLE_USER', id: user.id})} style={{cursor:'pointer', color: user.active ? 'green' : 'black'}}>{user.username}</b> <span>({user.email})</span>
+            <button onClick={()=> dispatch({type:'REMOVE_USER', id: user.id})}>삭제</button>
         </div>
     );
 });
@@ -32,7 +34,7 @@ type Users = {
 }
 
 type UserListType = {
-    users:any, onRemove:any, onToggle:any
+    users:any
 }
 
 function UserList(props:UserListType) {
@@ -42,7 +44,7 @@ function UserList(props:UserListType) {
         <div>
             {users.map((user: Users)=>(
                 // <User id={user.id} username={user.username} email={user.email} key={user.id}></User>
-                <User user={user} key={user.id} onRemove={props.onRemove} onToggle={props.onToggle}/>
+                <User user={user} key={user.id} />
             ))}
 
         </div>
