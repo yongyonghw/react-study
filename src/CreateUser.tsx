@@ -1,5 +1,6 @@
-import React, {useCallback, useContext} from 'react';
+import React, {useCallback, useContext, useRef} from 'react';
 import {UserDispatch} from "./App";
+import useInputs from "./hooks/useInputs";
 
 
 type CreateUserType =
@@ -8,18 +9,12 @@ type CreateUserType =
     }
 
 
-function CreateUser(props:CreateUserType) {
+function CreateUser() {
     console.log('createuser')
     const dispatch = useContext(UserDispatch)
-    const { username, email, onCreate } = props
-
-    const onChange = (e:any) => {
-        const { name, value } = e.target;
-        dispatch( {
-            type: 'CHANGE_INPUT',
-            name,value
-        });
-    }
+    // const { username, email, onCreate } = props
+    const nextId = useRef(3);
+    const [{username,email}, onChange, reset] = useInputs({username:'', email:''})
 
     return (
         <div>
@@ -35,7 +30,20 @@ function CreateUser(props:CreateUserType) {
                 onChange={onChange}
                 value={email}
             />
-            <button onClick={onCreate}>등록</button>
+            <button onClick={
+                () => {dispatch(
+                    {
+                        type: 'CREATE_USER',
+                        user: {
+                            username: username,
+                            email: email,
+                            id: ++ nextId.current
+                        }
+                    }
+                )
+                reset()
+                }
+            }>등록</button>
         </div>
     );
 }

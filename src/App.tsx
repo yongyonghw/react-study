@@ -42,14 +42,14 @@ const initialState:any = {
 
 function reducer(state:any, action:any) {
     switch (action.type) {
-        case 'CHANGE_INPUT' :
-            return {
-                ...state,
-                inputs: {
-                    ...state.inputs,
-                    [action.name] : action.value
-                }
-            };
+        // case 'CHANGE_INPUT' :
+        //     return {
+        //         ...state,
+        //         inputs: {
+        //             ...state.inputs,
+        //             [action.name] : action.value
+        //         }
+        //     };
 
         case 'CREATE_USER' :
             return {
@@ -79,11 +79,9 @@ export const UserDispatch = React.createContext((f:any)=>{});
 
 function AppReducer() {
     const [state, dispatch] = useReducer(reducer, initialState);
-    // const [{username,email}, onChange, reset] = useInputs({username:'', email:''})
+    const [{username,email}, onChange, reset] = useInputs({username:'', email:''})
      const {users} = state;
-    const {username, email} = state.inputs;
-    const nextId = useRef(4);
-
+    // const {username, email} = state.inputs;
     // const onChange = useCallback((e:any) => {
     //     const { name, value } = e.target;
     //     dispatch( {
@@ -92,17 +90,17 @@ function AppReducer() {
     //     });
     // }, [] );
 
-    const onCreate = useCallback(() => {
-        dispatch({
-            type: 'CREATE_USER',
-            user: {
-                id: nextId.current,
-                username,
-                email
-            }
-        });
-        nextId.current += 1;
-    }, [username, email]);
+    // const onCreate = useCallback(() => {
+    //     dispatch({
+    //         type: 'CREATE_USER',
+    //         user: {
+    //             id: nextId.current,
+    //             username,
+    //             email
+    //         }
+    //     });
+    //     nextId.current += 1;
+    // }, [username, email]);
 
     // const onToggle = useCallback(id => {
     //     dispatch({
@@ -121,7 +119,8 @@ function AppReducer() {
     const count = useMemo(() => countActiveUsers(users), [users]);
     return (
         <UserDispatch.Provider value={dispatch}>
-            <CreateUser username={username} email={email} onCreate={onCreate}/>
+            {/*<CreateUser username={username} email={email} onCreate={onCreate}/>*/}
+            <CreateUser/>
             <UserList users={users} ></UserList>
             <div>활성사용자 수: {count}</div>
         </UserDispatch.Provider>
