@@ -1,15 +1,26 @@
-import React from 'react';
+import React, {useCallback, useContext} from 'react';
+import {UserDispatch} from "./App";
 
 
 type CreateUserType =
     {
-        username:string, email:string, onChange:any, onCreate:any
+        username:string, email:string, onCreate:any
     }
 
 
 function CreateUser(props:CreateUserType) {
     console.log('createuser')
-    const { username, email, onChange, onCreate } = props
+    const dispatch = useContext(UserDispatch)
+    const { username, email, onCreate } = props
+
+    const onChange = (e:any) => {
+        const { name, value } = e.target;
+        dispatch( {
+            type: 'CHANGE_INPUT',
+            name,value
+        });
+    }
+
     return (
         <div>
             <input

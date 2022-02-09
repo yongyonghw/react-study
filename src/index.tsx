@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 import reportWebVitals from './reportWebVitals';
-import App, {AppReducer} from "./App";
+import AppReducer from "./App";
 
 
 ReactDOM.render(

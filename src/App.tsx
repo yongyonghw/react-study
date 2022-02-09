@@ -79,12 +79,10 @@ export const UserDispatch = React.createContext((f:any)=>{});
 
 function AppReducer() {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [{username,email}, onChange, reset] = useInputs({username:'', email:''})
+    // const [{username,email}, onChange, reset] = useInputs({username:'', email:''})
      const {users} = state;
-    // const {username, email} = state.inputs;
+    const {username, email} = state.inputs;
     const nextId = useRef(4);
-
-
 
     // const onChange = useCallback((e:any) => {
     //     const { name, value } = e.target;
@@ -123,97 +121,11 @@ function AppReducer() {
     const count = useMemo(() => countActiveUsers(users), [users]);
     return (
         <UserDispatch.Provider value={dispatch}>
-            <CreateUser username={username} email={email} onChange={onChange} onCreate={onCreate}/>
+            <CreateUser username={username} email={email} onCreate={onCreate}/>
             <UserList users={users} ></UserList>
             <div>활성사용자 수: {count}</div>
         </UserDispatch.Provider>
     )
-}
-
-function App() {
-    const format = {
-        username: '',
-        email: '',
-        id:'',
-        active: false
-    }
-
-    //username ,email 셋팅
-    const [inputs, setInputs] = useState(format);
-    const { username, email} = inputs;
-
-    //input 값이 변할때마다 렌더링
-    const onChange = useCallback((e:any) => {
-        const { name, value } = e.target;
-        setInputs(inputs => ({
-            //기존 input에 값을 덮어 씌운다
-            ...inputs,
-            [name]: value
-        }));
-    }, [] );
-
-    const [users, setUsers] = useState([
-        {
-            id: 1,
-            username: 'velopert',
-            email: 'public.velopert@gmail.com',
-            active: true
-        },
-        {
-            id: 2,
-            username: 'tester',
-            email: 'tester@example.com',
-            active: false
-        },
-        {
-            id: 3,
-            username: 'liz',
-            email: 'liz@example.com',
-            active: false
-        }
-    ]);
-    //nextId 초기값 4 test
-    const nextId = useRef(4);
-    const onCreate = useCallback(() => {
-        const user = {
-            id: nextId.current,
-            username,
-            email,
-            active: false
-        };
-        // setUsers([...users, user]);
-        setUsers(users => users.concat(user));
-        //초기화
-        setInputs(format);
-        nextId.current += 1;
-    }, [username, email]);
-
-    const onRemove = useCallback((id:Number) => {
-        setUsers(users => users.filter(user=> user.id !== id));
-    },[]);
-
-    const onToggle = useCallback((id:Number) => {
-        setUsers(users =>
-                users.map(user =>
-                user.id === id ? {
-                    ...user, active: !user.active
-                } : user
-            )
-            );
-    },[] );
-
-    const count = useCallback( countActiveUsers(users),[users]);
-
-    return (
-        <>
-            <CreateUser     username={username}
-                            email={email}
-                            onChange={onChange}
-                            onCreate={onCreate}/>
-            <UserList users={users}/>
-            <ActiveUser count = {count}></ActiveUser>
-        </>
-    );
 }
 
 type ActiveUserProps = {
@@ -225,7 +137,6 @@ const ActiveUser = React.memo(function ActiveUser({count} :ActiveUserProps) {
     return <div>활성 사용자수 : {count}</div>;
 });
 
-export {AppReducer};
-export default App;
+export default AppReducer;
 
 //4
