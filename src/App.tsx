@@ -5,6 +5,7 @@ import UserList from "./UserList";
 import React, {Dispatch, ReducerAction, useCallback, useEffect, useMemo, useReducer, useRef, useState} from "react";
 import CreateUser from "./CreateUser";
 import useInputs from "./hooks/useInputs";
+import produce from "immer";
 
 function countActiveUsers(users : any) {
     console.log('활성 사용자 수를 세는중...');
@@ -52,23 +53,33 @@ function reducer(state:any, action:any) {
         //     };
 
         case 'CREATE_USER' :
-            return {
-                inputs: initialState.inputs,
-                users: state.users.concat(action.user)
-            }
+            return produce(state, (draft:any) => {
+                draft.users.push(action.user);
+            });
+            // return {
+            //     inputs: initialState.inputs,
+            //     users: state.users.concat(action.user)
+            // }
         case 'TOGGLE_USER':
-            return {
-                ...state,
-                users: state.users.map((user:any) =>
-                    user.id === action.id ? { ...user, active: !user.active } : user
-                )
-            };
+            return produce(state, (draft:any) => {
+                const user = draft.users.find((user:any) => user.id === action.id);
+                user.active = !user.active;
+            })
+            // return {
+            //     ...state,
+            //     users: state.users.map((user:any) =>
+            //         user.id === action.id ? { ...user, active: !user.active } : user
+            //     )
+            // };
         case 'REMOVE_USER':
-            return {
-                ...state,
-                users: state.users.filter((user:any) => user.id !== action.id)
-            };
-
+            // return {
+            //     ...state,
+            //     users: state.users.filter((user:any) => user.id !== action.id)
+            // };
+            return produce(state, (draft:any) => {
+                const delNo = draft.users.findIndex((user :any ) => user.id === action.id);
+                draft.users.splice(delNo, 1)
+            })
         default:
             return state;
     }
