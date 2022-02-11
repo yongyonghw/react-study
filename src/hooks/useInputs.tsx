@@ -11,12 +11,12 @@ function useInputs(initialForm:any) {
     const onChange = useCallback(e => {
         const { name, value } = e.target;
         setForm(
-            // setForm((form:any) => ({...form, [name]: value}));
-            produce((draft:any) => {
-                draft[name] = value;
+        // setForm((form:any) => ({...form, [name]: value}));
+        produce( (draft:any) => {
+            draft[name] = value;
         })
         );
-    },[]);
+    }, []);
 
 
 
