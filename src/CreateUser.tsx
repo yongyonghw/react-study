@@ -1,23 +1,24 @@
 import React, {useCallback, useContext, useRef} from 'react';
 import {UserDispatch} from "./App";
 import useInputs from "./hooks/useInputs";
+import ErrorBound from "./ErrorBound";
 
 
 type CreateUserType =
     {
-        username:string, email:string, onCreate:any
+        username: string, email: string, onCreate: any
     }
 
 
 function CreateUser() {
-    console.log('createuser')
     const dispatch = useContext(UserDispatch)
     // const { username, email, onCreate } = props
     const nextId = useRef(3);
-    const [{username,email}, onChange, reset] = useInputs({username:'', email:''})
+    const [{username, email}, onChange, reset] = useInputs({username: '', email: ''})
 
     return (
         <div>
+            <ErrorBound>
             <input
                 name="username"
                 placeholder="계정명"
@@ -31,21 +32,24 @@ function CreateUser() {
                 value={email}
             />
             <button onClick={
-                () => {dispatch(
-                    {
-                        type: 'CREATE_USER',
-                        user: {
-                            username: username,
-                            email: email,
-                            id: ++ nextId.current
+                () => {
+                    dispatch(
+                        {
+                            type: 'CREATE_USER',
+                            user: {
+                                username: username,
+                                email: email,
+                                id: ++nextId.current
+                            }
                         }
-                    }
-                )
-                reset()
+                    )
+                    reset()
                 }
-            }>등록</button>
+            }>등록
+            </button>
+            </ErrorBound>
         </div>
     );
 }
 
-export default  React.memo(CreateUser);
+export default React.memo(CreateUser);

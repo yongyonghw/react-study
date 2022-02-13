@@ -6,6 +6,7 @@ import React, {Dispatch, ReducerAction, useCallback, useEffect, useMemo, useRedu
 import CreateUser from "./CreateUser";
 import useInputs from "./hooks/useInputs";
 import produce from "immer";
+import ErrorBound from "./ErrorBound";
 
 function countActiveUsers(users : any) {
     console.log('활성 사용자 수를 세는중...');
