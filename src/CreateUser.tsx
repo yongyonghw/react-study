@@ -19,34 +19,34 @@ function CreateUser() {
     return (
         <div>
             <ErrorBound>
-            <input
-                name="username"
-                placeholder="계정명"
-                onChange={onChange}
-                value={username}
-            />
-            <input
-                name="email"
-                placeholder="이메일"
-                onChange={onChange}
-                value={email}
-            />
-            <button onClick={
-                () => {
-                    dispatch(
-                        {
-                            type: 'CREATE_USER',
-                            user: {
-                                username: username,
-                                email: email,
-                                id: ++nextId.current
+                <input
+                    name="username"
+                    placeholder="계정명"
+                    onChange={onChange}
+                    value={username}
+                />
+                <input
+                    name="email"
+                    placeholder="이메일"
+                    onChange={onChange}
+                    value={email}
+                />
+                <button onClick={
+                    () => {
+                        dispatch(
+                            {
+                                type: 'CREATE_USER',
+                                user: {
+                                    username: username,
+                                    email: email,
+                                    id: ++nextId.current
+                                }
                             }
-                        }
-                    )
-                    reset()
-                }
-            }>등록
-            </button>
+                        )
+                        reset()
+                    }
+                }>등록
+                </button>
             </ErrorBound>
         </div>
     );

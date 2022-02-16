@@ -7,6 +7,9 @@ import CreateUser from "./CreateUser";
 import useInputs from "./hooks/useInputs";
 import produce from "immer";
 import ErrorBound from "./ErrorBound";
+// @ts-ignore
+import styled, {createGlobalStyle} from "styled-components";
+import {MdAdd} from "react-icons/md";
 
 function countActiveUsers(users : any) {
     console.log('활성 사용자 수를 세는중...');
@@ -89,6 +92,33 @@ function reducer(state:any, action:any) {
 
 export const UserDispatch = React.createContext((f:any)=>{});
 
+const GlobalStyle = createGlobalStyle`
+  body {
+    background: #e9ecef;
+  }
+`;
+
+const TodoTemplateBlock = styled.div`
+  width: 512px;
+  height: 768px;
+
+  position: relative; /* 추후 박스 하단에 추가 버튼을 위치시키기 위한 설정 */
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.04);
+
+  margin: 0 auto; /* 페이지 중앙에 나타나도록 설정 */
+
+  margin-top: 96px;
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+`;
+
+function TodoTemplate(prop:any) {
+    return <TodoTemplateBlock>{prop.children}</TodoTemplateBlock>;
+}
+
 function AppReducer() {
     const [state, dispatch] = useReducer(reducer, initialState);
     const [{username,email}, onChange, reset] = useInputs({username:'', email:''})
@@ -132,6 +162,9 @@ function AppReducer() {
     return (
         <UserDispatch.Provider value={dispatch}>
             {/*<CreateUser username={username} email={email} onCreate={onCreate}/>*/}
+            <GlobalStyle></GlobalStyle>
+            <MdAdd />
+            <TodoTemplate>안녕하세요</TodoTemplate>
             <CreateUser/>
             <UserList users={users} ></UserList>
             <div>활성사용자 수: {count}</div>
